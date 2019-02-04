@@ -1,6 +1,6 @@
 [package]
 name = "smush"
-version = "0.5.0"
+version = "0.1.0"
 authors = ["Graham Wihlidal <graham@wihlidal.ca>"]
 description = "Common rust abstraction around a variety of compression codecs."
 homepage = "https://github.com/gwihlidal/smush-rs"
@@ -11,15 +11,10 @@ license = "MIT/Apache-2.0"
 edition = "2018"
 
 [dependencies]
-base58 = "0.1.0"
-sha2 = "0.8.0"
-filebuffer = "0.4.0"
-failure = "0.1.5"
+bs58 = "0.2.2"
 flate2 = "1.0.6"
 brotli = "3.1.8"
 lzma-rs = "0.1.0"
 lz4 = "1.23.1"
 zstd = { version="0.4.22+zstd.1.3.8", default-features = false }
 bincode = "1.0.1"
-byteorder = "1.3.1"
-log = "0.4.6"

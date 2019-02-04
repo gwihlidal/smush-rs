@@ -1,8 +1,3 @@
-# smush
-
-Common rust abstraction around a variety of encoding and compression codecs.
-
-```rust
 extern crate smush;
 
 use smush::{decode_data, encode_data, Encoding};
@@ -90,4 +85,3 @@ fn main() {
     assert_eq!(&TEST_DATA, &bincode_prime.as_slice());
     assert_eq!(&TEST_DATA, &base58_prime.as_slice());
 }
-```
