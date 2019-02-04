@@ -1,6 +1,23 @@
 # smush
 
+[![Latest version](https://img.shields.io/crates/v/smush.svg)](https://crates.io/crates/smush)
+[![Documentation](https://docs.rs/smush/badge.svg)](https://docs.rs/smush)
+[![LoC](https://tokei.rs/b1/github/gwihlidal/smush)](https://github.com/gwihlidal/smush)
+![MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![APACHE2](https://img.shields.io/badge/license-APACHE2-blue.svg)
+
 Common rust abstraction around a variety of encoding and compression codecs.
+
+## Usage
+
+Add this to your `Cargo.toml`:
+
+```toml
+[dependencies]
+smush = "0.1.0"
+```
+
+Example:
 
 ```rust
 extern crate smush;
@@ -90,4 +107,21 @@ fn main() {
     assert_eq!(&TEST_DATA, &bincode_prime.as_slice());
     assert_eq!(&TEST_DATA, &base58_prime.as_slice());
 }
+```
+
+## Example
+
+```shell
+$ cargo run --release --example main
+
+Deflate is 63.121967% smaller than Identity
+Gzip is 62.798637% smaller than Identity
+Brotli is 63.319565% smaller than Identity
+Zlib is 63.01419% smaller than Identity
+Zstd is 62.29567% smaller than Identity
+Lz4 is 46.6499% smaller than Identity
+Lzma is 43.955452% smaller than Identity
+Lzma2 is 0.07185198% larger than Identity
+BinCode is 0.14370397% larger than Identity
+Base58 is 36.57266% larger than Identity
 ```
