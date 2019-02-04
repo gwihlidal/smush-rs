@@ -1,5 +1,6 @@
 # smush
 
+[![meshopt on travis-ci.com](https://travis-ci.com/gwihlidal/smush-rs.svg?branch=master)](https://travis-ci.com/gwihlidal/smush-rs)
 [![Latest version](https://img.shields.io/crates/v/smush.svg)](https://crates.io/crates/smush)
 [![Documentation](https://docs.rs/smush/badge.svg)](https://docs.rs/smush)
 [![LoC](https://tokei.rs/b1/github/gwihlidal/smush)](https://github.com/gwihlidal/smush)
@@ -14,7 +15,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-smush = "0.1.0"
+smush = "0.1.1"
 ```
 
 Example:
