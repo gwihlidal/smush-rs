@@ -1,6 +1,6 @@
 [package]
 name = "smush"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Graham Wihlidal <graham@wihlidal.ca>"]
 description = "Common rust abstraction around a variety of compression codecs."
 homepage = "https://github.com/gwihlidal/smush-rs"
@@ -9,6 +9,15 @@ readme = "README.md"
 keywords = ["data", "encode", "compress", "decompress", "pipeline"]
 license = "MIT/Apache-2.0"
 edition = "2018"
+
+[badges]
+travis-ci = { repository = "gwihlidal/smush-rs" }
+maintenance = { status = "actively-developed" }
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
 
 [dependencies]
 bs58 = "0.2.2"
