@@ -1,5 +1,9 @@
 # Changes
 
+## 0.1.4 (2019-02-07)
+
+* Fix build issue with tests.
+
 ## 0.1.3 (2019-02-07)
 
 * Exposed a quality setting to the common interface that maps appropriately to each codec.
