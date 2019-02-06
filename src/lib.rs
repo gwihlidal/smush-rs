@@ -247,141 +247,141 @@ mod tests {
 
     #[test]
     fn encode_identity() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Identity).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Identity, Quality::Default).unwrap();
         assert_eq!(&TEST_DATA, &encoded.as_slice());
     }
 
     #[cfg(feature = "gzip_support")]
     #[test]
     fn encode_gzip() {
-        encode_data(&TEST_DATA, Encoding::Gzip).unwrap();
+        encode(&TEST_DATA, Encoding::Gzip, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "deflate_support")]
     #[test]
     fn encode_deflate() {
-        encode_data(&TEST_DATA, Encoding::Deflate).unwrap();
+        encode(&TEST_DATA, Encoding::Deflate, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "zlib_support")]
     #[test]
     fn encode_zlib() {
-        encode_data(&TEST_DATA, Encoding::Zlib).unwrap();
+        encode(&TEST_DATA, Encoding::Zlib, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "zstd_support")]
     #[test]
     fn encode_zstd() {
-        encode_data(&TEST_DATA, Encoding::Zstd).unwrap();
+        encode(&TEST_DATA, Encoding::Zstd, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "brotli_support")]
     #[test]
     fn encode_brotli() {
-        encode_data(&TEST_DATA, Encoding::Brotli).unwrap();
+        encode(&TEST_DATA, Encoding::Brotli, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "lz4_support")]
     #[test]
     fn encode_lz4() {
-        encode_data(&TEST_DATA, Encoding::Lz4).unwrap();
+        encode(&TEST_DATA, Encoding::Lz4, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "xz_support")]
     #[test]
     fn encode_xz() {
-        encode_data(&TEST_DATA, Encoding::Xz).unwrap();
+        encode(&TEST_DATA, Encoding::Xz, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "bincode_support")]
     #[test]
     fn encode_bincode() {
-        encode_data(&TEST_DATA, Encoding::BinCode).unwrap();
+        encode(&TEST_DATA, Encoding::BinCode, Quality::Default).unwrap();
     }
 
     #[cfg(feature = "base58_support")]
     #[test]
     fn encode_base58() {
-        encode_data(&TEST_DATA, Encoding::Base58).unwrap();
+        encode(&TEST_DATA, Encoding::Base58, Quality::Default).unwrap();
     }
 
     #[test]
     fn decode_identity() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Identity).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Identity, Quality::Default).unwrap();
         assert_eq!(&encoded, &TEST_DATA);
-        let decoded = decode_data(&encoded, Encoding::Identity).unwrap();
+        let decoded = decode(&encoded, Encoding::Identity).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "gzip_support")]
     #[test]
     fn decode_gzip() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Gzip).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Gzip).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Gzip, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Gzip).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "deflate_support")]
     #[test]
     fn decode_deflate() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Deflate).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Deflate).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Deflate, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Deflate).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "zlib_support")]
     #[test]
     fn decode_zlib() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Zlib).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Zlib).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Zlib, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Zlib).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "zstd_support")]
     #[test]
     fn decode_zstd() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Zstd).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Zstd).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Zstd, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Zstd).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "brotli_support")]
     #[test]
     fn decode_brotli() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Brotli).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Brotli).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Brotli, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Brotli).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "lz4_support")]
     #[test]
     fn decode_lz4() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Lz4).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Lz4).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Lz4, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Lz4).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "xz_support")]
     #[test]
     fn decode_xz() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Xz).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Xz).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Xz, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Xz).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "bincode_support")]
     #[test]
     fn decode_bincode() {
-        let encoded = encode_data(&TEST_DATA, Encoding::BinCode).unwrap();
-        let decoded = decode_data(&encoded, Encoding::BinCode).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::BinCode, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::BinCode).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
     #[cfg(feature = "base58_support")]
     #[test]
     fn decode_base58() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Base58).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Base58).unwrap();
+        let encoded = encode(&TEST_DATA, Encoding::Base58, Quality::Default).unwrap();
+        let decoded = decode(&encoded, Encoding::Base58).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 }
