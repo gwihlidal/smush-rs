@@ -30,9 +30,27 @@ zstd = { version="0.4.22+zstd.1.3.8", default-features = false, optional = true 
 
 [features]
 default = ["all"]
-all = ["base58", "bincode", "brotli", "deflate", "gzip", "lzma", "lz4", "zlib", "zstd"]
-base58 = ["bs58"]
-deflate = ["flate2"]
-gzip = ["flate2"]
-lzma = ["lzma-rs"]
-zlib = ["flate2"]
+all = [
+    "bincode_support",
+    "brotli_support",
+    "base58_support",
+    "deflate_support",
+    "gzip_support",
+    "lzma_support",
+    "lzma2_support",
+    "lz4_support",
+    "zlib_support",
+    "zstd_support",
+    "custom_support",
+]
+base58_support = ["bs58"]
+bincode_support = ["bincode"]
+brotli_support = ["brotli"]
+deflate_support = ["flate2"]
+gzip_support = ["flate2"]
+lz4_support = ["lz4"]
+lzma_support = ["lzma-rs"]
+lzma2_support = ["lzma-rs"]
+zlib_support = ["flate2"]
+zstd_support = ["zstd"]
+custom_support = []
