@@ -43,11 +43,7 @@ fn run_test(encoding: Encoding, quality: Quality) {
             &format!("encode: {}, decode: {}", encode_elapsed, decode_elapsed),
         );
     } else {
-        println!(
-            "[{}] - {} not enabled",
-            &format!("{}", quality),
-            &encoding
-        );
+        println!("[{}] - {} not enabled", &format!("{}", quality), &encoding);
     }
 }
 
