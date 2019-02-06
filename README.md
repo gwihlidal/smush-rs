@@ -15,7 +15,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-smush = "0.1.3"
+smush = "0.1.4"
 ```
 
 Example:
