@@ -25,8 +25,7 @@ fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str, timings
 }
 
 fn run_test(encoding: Encoding, quality: Quality) {
-    let enabled = enabled_encoding(encoding.clone());
-    if enabled {
+    if enabled_encoding(encoding.clone()) {
         let (encode_elapsed, encoded) =
             measure_time(|| encode(&TEST_DATA, encoding.clone(), quality.clone()).unwrap());
         assert_ne!(&TEST_DATA, &encoded.as_slice());
@@ -44,7 +43,11 @@ fn run_test(encoding: Encoding, quality: Quality) {
             &format!("encode: {}, decode: {}", encode_elapsed, decode_elapsed),
         );
     } else {
-        println!("Encoding '{}': not enabled", &encoding);
+        println!(
+            "[{}] - {} not enabled",
+            &format!("{}", quality),
+            &encoding
+        );
     }
 }
 
