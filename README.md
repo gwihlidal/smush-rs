@@ -23,90 +23,75 @@ Example:
 ```rust
 extern crate smush;
 
-use smush::{decode_data, encode_data, Encoding};
+use smush::{decode, enabled_encoding, encode, Encoding, Quality};
 
 const TEST_DATA: &'static [u8] = include_bytes!("../src/ipsum.txt");
 
-fn print_delta(identity: f32, codec: f32, name: &str) {
+fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str) {
     let delta = (identity - codec) / identity * 100f32;
     if delta > 0f32 {
-        println!("{} is {}% smaller than Identity", name, delta);
+        println!(
+            "[{}] - {} is {}% smaller than identity",
+            quality, encoding, delta
+        );
     } else {
-        println!("{} is {}% larger than Identity", name, delta.abs());
+        println!(
+            "[{}] - {} is {}% larger than identity",
+            quality,
+            encoding,
+            delta.abs()
+        );
     }
 }
 
+fn run_test(encoding: Encoding, quality: Quality) {
+    let enabled = enabled_encoding(encoding.clone());
+    if enabled {
+        let encoded = encode(&TEST_DATA, encoding.clone(), quality.clone()).unwrap();
+        assert_ne!(&TEST_DATA, &encoded.as_slice());
+
+        let decoded = decode(&encoded, encoding.clone()).unwrap();
+        assert_eq!(&TEST_DATA, &decoded.as_slice());
+
+        let encoded_len = encoded.len() as f32;
+        print_delta(
+            TEST_DATA.len() as f32,
+            encoded_len,
+            &format!("{}", encoding),
+            &format!("{}", quality),
+        );
+    } else {
+        println!("Encoding '{}': not enabled", &encoding);
+    }
+}
+
+fn run_tests(quality: Quality) {
+    run_test(Encoding::Deflate, quality.clone());
+    run_test(Encoding::Gzip, quality.clone());
+    run_test(Encoding::Brotli, quality.clone());
+    run_test(Encoding::Zlib, quality.clone());
+    run_test(Encoding::Zstd, quality.clone());
+    run_test(Encoding::Lz4, quality.clone());
+    run_test(Encoding::Xz, quality.clone());
+    run_test(Encoding::BinCode, quality.clone());
+    run_test(Encoding::Base58, quality.clone());
+}
+
 fn main() {
-    let identity = encode_data(&TEST_DATA, Encoding::Identity).unwrap();
-    let deflate = encode_data(&TEST_DATA, Encoding::Deflate).unwrap();
-    let gzip = encode_data(&TEST_DATA, Encoding::Gzip).unwrap();
-    let brotli = encode_data(&TEST_DATA, Encoding::Brotli).unwrap();
-    let zlib = encode_data(&TEST_DATA, Encoding::Zlib).unwrap();
-    let zstd = encode_data(&TEST_DATA, Encoding::Zstd).unwrap();
-    let lz4 = encode_data(&TEST_DATA, Encoding::Lz4).unwrap();
-    let lzma = encode_data(&TEST_DATA, Encoding::Lzma).unwrap();
-    let lzma2 = encode_data(&TEST_DATA, Encoding::Lzma2).unwrap();
-    let bincode = encode_data(&TEST_DATA, Encoding::BinCode).unwrap();
-    let base58 = encode_data(&TEST_DATA, Encoding::Base58).unwrap();
+    println!("*********************");
+    println!("Level 1 Quality");
+    println!("*********************");
+    run_tests(Quality::Level1);
 
-    assert_eq!(&TEST_DATA, &identity.as_slice());
-    assert_ne!(&TEST_DATA, &deflate.as_slice());
-    assert_ne!(&TEST_DATA, &gzip.as_slice());
-    assert_ne!(&TEST_DATA, &brotli.as_slice());
-    assert_ne!(&TEST_DATA, &zlib.as_slice());
-    assert_ne!(&TEST_DATA, &zstd.as_slice());
-    assert_ne!(&TEST_DATA, &lz4.as_slice());
-    assert_ne!(&TEST_DATA, &lzma.as_slice());
-    assert_ne!(&TEST_DATA, &lzma2.as_slice());
-    assert_ne!(&TEST_DATA, &bincode.as_slice());
-    assert_ne!(&TEST_DATA, &base58.as_slice());
+    println!("*********************");
+    println!("Default Quality");
+    println!("*********************");
+    run_tests(Quality::Default);
 
-    let identity_prime = decode_data(&identity, Encoding::Identity).unwrap();
-    let deflate_prime = decode_data(&deflate, Encoding::Deflate).unwrap();
-    let gzip_prime = decode_data(&gzip, Encoding::Gzip).unwrap();
-    let brotli_prime = decode_data(&brotli, Encoding::Brotli).unwrap();
-    let zlib_prime = decode_data(&zlib, Encoding::Zlib).unwrap();
-    let zstd_prime = decode_data(&zstd, Encoding::Zstd).unwrap();
-    let lz4_prime = decode_data(&lz4, Encoding::Lz4).unwrap();
-    let lzma_prime = decode_data(&lzma, Encoding::Lzma).unwrap();
-    let lzma2_prime = decode_data(&lzma2, Encoding::Lzma2).unwrap();
-    let bincode_prime = decode_data(&bincode, Encoding::BinCode).unwrap();
-    let base58_prime = decode_data(&base58, Encoding::Base58).unwrap();
-
-    let identity_len = identity.len() as f32;
-    let deflate_len = deflate.len() as f32;
-    let gzip_len = gzip.len() as f32;
-    let brotli_len = brotli.len() as f32;
-    let zlib_len = zlib.len() as f32;
-    let zstd_len = zstd.len() as f32;
-    let lz4_len = lz4.len() as f32;
-    let lzma_len = lzma.len() as f32;
-    let lzma2_len = lzma2.len() as f32;
-    let bincode_len = bincode.len() as f32;
-    let base58_len = base58.len() as f32;
-
-    print_delta(identity_len, deflate_len, "Deflate");
-    print_delta(identity_len, gzip_len, "Gzip");
-    print_delta(identity_len, brotli_len, "Brotli");
-    print_delta(identity_len, zlib_len, "Zlib");
-    print_delta(identity_len, zstd_len, "Zstd");
-    print_delta(identity_len, lz4_len, "Lz4");
-    print_delta(identity_len, lzma_len, "Lzma");
-    print_delta(identity_len, lzma2_len, "Lzma2");
-    print_delta(identity_len, bincode_len, "BinCode");
-    print_delta(identity_len, base58_len, "Base58");
-
-    assert_eq!(&TEST_DATA, &identity_prime.as_slice());
-    assert_eq!(&TEST_DATA, &deflate_prime.as_slice());
-    assert_eq!(&TEST_DATA, &gzip_prime.as_slice());
-    assert_eq!(&TEST_DATA, &brotli_prime.as_slice());
-    assert_eq!(&TEST_DATA, &zlib_prime.as_slice());
-    assert_eq!(&TEST_DATA, &zstd_prime.as_slice());
-    assert_eq!(&TEST_DATA, &lz4_prime.as_slice());
-    assert_eq!(&TEST_DATA, &lzma_prime.as_slice());
-    assert_eq!(&TEST_DATA, &lzma2_prime.as_slice());
-    assert_eq!(&TEST_DATA, &bincode_prime.as_slice());
-    assert_eq!(&TEST_DATA, &base58_prime.as_slice());
+    println!("*********************");
+    println!("Maximum Quality");
+    println!("*********************");
+    run_tests(Quality::Maximum);
 }
 ```
 
@@ -115,14 +100,40 @@ fn main() {
 ```shell
 $ cargo run --release --example main
 
-Deflate is 63.121967% smaller than Identity
-Gzip is 62.798637% smaller than Identity
-Brotli is 63.319565% smaller than Identity
-Zlib is 63.01419% smaller than Identity
-Zstd is 62.29567% smaller than Identity
-Lz4 is 46.6499% smaller than Identity
-Lzma is 43.955452% smaller than Identity
-Lzma2 is 0.07185198% larger than Identity
-BinCode is 0.14370397% larger than Identity
-Base58 is 36.57266% larger than Identity
+*********************
+Level 1 Quality
+*********************
+[level1] - deflate is 53.080654% smaller than identity
+[level1] - gzip is 52.757324% smaller than identity
+[level1] - brotli is 53.332138% smaller than identity
+[level1] - zlib is 52.972878% smaller than identity
+[level1] - zstd is 59.798813% smaller than identity
+[level1] - lz4 is 40.95563% smaller than identity
+[level1] - xz is 60.62511% smaller than identity
+[level1] - bincode is 0.14370397% larger than identity
+[level1] - base58 is 36.57266% larger than identity
+*********************
+Default Quality
+*********************
+[default] - deflate is 63.121967% smaller than identity
+[default] - gzip is 62.798637% smaller than identity
+[default] - brotli is 63.319565% smaller than identity
+[default] - zlib is 63.01419% smaller than identity
+[default] - zstd is 62.29567% smaller than identity
+[default] - lz4 is 46.667866% smaller than identity
+[default] - xz is 62.06215% smaller than identity
+[default] - bincode is 0.14370397% larger than identity
+[default] - base58 is 36.57266% larger than identity
+*********************
+Maximum Quality
+*********************
+[maximum] - deflate is 63.121967% smaller than identity
+[maximum] - gzip is 62.798637% smaller than identity
+[maximum] - brotli is 65.11586% smaller than identity
+[maximum] - zlib is 63.01419% smaller than identity
+[maximum] - zstd is 64.199745% smaller than identity
+[maximum] - lz4 is 46.667866% smaller than identity
+[maximum] - xz is 62.06215% smaller than identity
+[maximum] - bincode is 0.14370397% larger than identity
+[maximum] - base58 is 36.57266% larger than identity
 ```
