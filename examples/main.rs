@@ -57,14 +57,14 @@ fn run_tests(quality: Quality) {
 
 fn main() {
     println!("*********************");
-    println!("Default Quality");
-    println!("*********************");
-    run_tests(Quality::Default);
-
-    println!("*********************");
     println!("Level 1 Quality");
     println!("*********************");
     run_tests(Quality::Level1);
+
+    println!("*********************");
+    println!("Default Quality");
+    println!("*********************");
+    run_tests(Quality::Default);
 
     println!("*********************");
     println!("Maximum Quality");
