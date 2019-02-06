@@ -49,8 +49,7 @@ fn run_tests(quality: Quality) {
     run_test(Encoding::Zlib, quality.clone());
     run_test(Encoding::Zstd, quality.clone());
     run_test(Encoding::Lz4, quality.clone());
-    run_test(Encoding::Lzma, quality.clone());
-    run_test(Encoding::Lzma2, quality.clone());
+    run_test(Encoding::Xz, quality.clone());
     run_test(Encoding::BinCode, quality.clone());
     run_test(Encoding::Base58, quality.clone());
 }

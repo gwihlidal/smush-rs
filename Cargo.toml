@@ -24,7 +24,7 @@ bincode = { version = "1.0.1", optional = true }
 brotli = { version = "3.1.8", optional = true }
 bs58 = { version = "0.2.2", optional = true }
 flate2 = { version = "1.0.6", optional = true }
-lzma-rs = { version = "0.1.0", optional = true }
+xz2 = { version = "0.1.6", optional = true }
 lz4 = { version = "1.23.1", optional = true }
 zstd = { version="0.4.22+zstd.1.3.8", default-features = false, optional = true }
 
@@ -36,8 +36,7 @@ all = [
     "base58_support",
     "deflate_support",
     "gzip_support",
-    "lzma_support",
-    "lzma2_support",
+    "xz_support",
     "lz4_support",
     "zlib_support",
     "zstd_support",
@@ -49,8 +48,7 @@ brotli_support = ["brotli"]
 deflate_support = ["flate2"]
 gzip_support = ["flate2"]
 lz4_support = ["lz4"]
-lzma_support = ["lzma-rs"]
-lzma2_support = ["lzma-rs"]
+xz_support = ["xz2"]
 zlib_support = ["flate2"]
 zstd_support = ["zstd"]
 custom_support = []

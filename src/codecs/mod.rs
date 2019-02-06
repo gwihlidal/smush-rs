@@ -16,11 +16,8 @@ pub mod gzip;
 #[cfg(feature = "lz4_support")]
 pub mod lz4;
 
-#[cfg(feature = "lzma_support")]
-pub mod lzma;
-
-#[cfg(feature = "lzma2_support")]
-pub mod lzma2;
+#[cfg(feature = "xz_support")]
+pub mod xz;
 
 #[cfg(feature = "zlib_support")]
 pub mod zlib;

@@ -23,11 +23,8 @@ pub enum Encoding {
     /// The 'lz4' encoding.
     Lz4,
 
-    /// The 'lzma' encoding.
-    Lzma,
-
-    /// The 'lzma2' encoding.
-    Lzma2,
+    /// The 'xz' encoding (also known as `lzma`).
+    Xz,
 
     /// The 'bincode' encoding.
     BinCode,
@@ -55,8 +52,7 @@ impl fmt::Display for Encoding {
             Encoding::Zstd => "zstd",
             Encoding::Brotli => "brotli",
             Encoding::Lz4 => "lz4",
-            Encoding::Lzma => "lzma",
-            Encoding::Lzma2 => "lzma2",
+            Encoding::Xz => "xz",
             Encoding::BinCode => "bincode",
             Encoding::Base58 => "base58",
             Encoding::Identity => "identity",
@@ -76,8 +72,7 @@ impl str::FromStr for Encoding {
             "zstd" => Ok(Encoding::Zstd),
             "brotli" => Ok(Encoding::Brotli),
             "lz4" => Ok(Encoding::Lz4),
-            "lzma" => Ok(Encoding::Lzma),
-            "lzma2" => Ok(Encoding::Lzma2),
+            "xz" => Ok(Encoding::Xz),
             "bincode" => Ok(Encoding::BinCode),
             "base58" => Ok(Encoding::Base58),
             "identity" => Ok(Encoding::Identity),
@@ -162,11 +157,8 @@ pub fn encode(data: &[u8], encoding: Encoding, quality: Quality) -> io::Result<V
         #[cfg(feature = "lz4_support")]
         Encoding::Lz4 => codecs::lz4::encode(data, quality),
 
-        #[cfg(feature = "lzma_support")]
-        Encoding::Lzma => codecs::lzma::encode(data, quality),
-
-        #[cfg(feature = "lzma2_support")]
-        Encoding::Lzma2 => codecs::lzma2::encode(data, quality),
+        #[cfg(feature = "xz_support")]
+        Encoding::Xz => codecs::xz::encode(data, quality),
 
         #[cfg(feature = "bincode_support")]
         Encoding::BinCode => codecs::bincode::encode(data, quality),
@@ -209,11 +201,8 @@ pub fn decode(data: &[u8], encoding: Encoding) -> io::Result<Vec<u8>> {
         #[cfg(feature = "lz4_support")]
         Encoding::Lz4 => codecs::lz4::decode(data),
 
-        #[cfg(feature = "lzma_support")]
-        Encoding::Lzma => codecs::lzma::decode(data),
-
-        #[cfg(feature = "lzma2_support")]
-        Encoding::Lzma2 => codecs::lzma2::decode(data),
+        #[cfg(feature = "xz_support")]
+        Encoding::Xz => codecs::xz::decode(data),
 
         #[cfg(feature = "bincode_support")]
         Encoding::BinCode => codecs::bincode::decode(data),
@@ -241,8 +230,7 @@ pub fn enabled_encoding(encoding: Encoding) -> bool {
         Encoding::Zstd => cfg!(feature = "zstd_support"),
         Encoding::Brotli => cfg!(feature = "brotli_support"),
         Encoding::Lz4 => cfg!(feature = "lz4_support"),
-        Encoding::Lzma => cfg!(feature = "lzma_support"),
-        Encoding::Lzma2 => cfg!(feature = "lzma2_support"),
+        Encoding::Xz => cfg!(feature = "xz_support"),
         Encoding::BinCode => cfg!(feature = "bincode_support"),
         Encoding::Base58 => cfg!(feature = "base58_support"),
         Encoding::Identity => true,
@@ -299,16 +287,10 @@ mod tests {
         encode_data(&TEST_DATA, Encoding::Lz4).unwrap();
     }
 
-    #[cfg(feature = "lzma_support")]
+    #[cfg(feature = "xz_support")]
     #[test]
-    fn encode_lzma() {
-        encode_data(&TEST_DATA, Encoding::Lzma).unwrap();
-    }
-
-    #[cfg(feature = "lzma2_support")]
-    #[test]
-    fn encode_lzma2() {
-        encode_data(&TEST_DATA, Encoding::Lzma2).unwrap();
+    fn encode_xz() {
+        encode_data(&TEST_DATA, Encoding::Xz).unwrap();
     }
 
     #[cfg(feature = "bincode_support")]
@@ -379,19 +361,11 @@ mod tests {
         assert_eq!(decoded, TEST_DATA);
     }
 
-    #[cfg(feature = "lzma_support")]
+    #[cfg(feature = "xz_support")]
     #[test]
-    fn decode_lzma() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Lzma).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Lzma).unwrap();
-        assert_eq!(decoded, TEST_DATA);
-    }
-
-    #[cfg(feature = "lzma2_support")]
-    #[test]
-    fn decode_lzma2() {
-        let encoded = encode_data(&TEST_DATA, Encoding::Lzma2).unwrap();
-        let decoded = decode_data(&encoded, Encoding::Lzma2).unwrap();
+    fn decode_xz() {
+        let encoded = encode_data(&TEST_DATA, Encoding::Xz).unwrap();
+        let decoded = decode_data(&encoded, Encoding::Xz).unwrap();
         assert_eq!(decoded, TEST_DATA);
     }
 
