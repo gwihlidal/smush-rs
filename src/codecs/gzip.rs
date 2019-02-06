@@ -1,4 +1,4 @@
-pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn encode(data: &[u8], _quality: crate::Quality) -> std::io::Result<Vec<u8>> {
     use flate2::{read::GzEncoder, Compression};
     use std::io::Read;
     let mut buf = Vec::new();
@@ -6,7 +6,7 @@ pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
     Ok(buf)
 }
 
-pub fn decode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn decode(data: &[u8]) -> std::io::Result<Vec<u8>> {
     use flate2::write::GzDecoder;
     use std::io::Write;
     let mut buf = Vec::new();

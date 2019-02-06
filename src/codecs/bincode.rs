@@ -1,4 +1,4 @@
-pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn encode(data: &[u8], _: crate::Quality) -> std::io::Result<Vec<u8>> {
     match bincode::serialize(&data[..]) {
         Err(err) => Err(std::io::Error::new(
             std::io::ErrorKind::Other,
@@ -8,7 +8,7 @@ pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
     }
 }
 
-pub fn decode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn decode(data: &[u8]) -> std::io::Result<Vec<u8>> {
     match bincode::deserialize(&data[..]) {
         Err(err) => Err(std::io::Error::new(
             std::io::ErrorKind::Other,

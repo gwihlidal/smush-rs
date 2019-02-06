@@ -1,4 +1,4 @@
-pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn encode(data: &[u8], _quality: crate::Quality) -> std::io::Result<Vec<u8>> {
     let mut buf = Vec::new();
     let mut writer = std::io::Cursor::new(&mut buf);
     let mut encoder = lz4::EncoderBuilder::new().level(4).build(&mut writer)?;
@@ -16,7 +16,7 @@ pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
     }
 }
 
-pub fn decode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn decode(data: &[u8]) -> std::io::Result<Vec<u8>> {
     let mut buf = Vec::new();
     let mut writer = std::io::Cursor::new(&mut buf);
     let mut decoder = lz4::Decoder::new(std::io::Cursor::new(data))?;

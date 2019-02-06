@@ -1,4 +1,4 @@
-pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn encode(data: &[u8], _quality: crate::Quality) -> std::io::Result<Vec<u8>> {
     let mut buf = Vec::new();
     lzma_rs::lzma_compress(&mut std::io::Cursor::new(data), &mut buf).map_err(|err| {
         std::io::Error::new(
@@ -9,7 +9,7 @@ pub fn encode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
     Ok(buf)
 }
 
-pub fn decode_data(data: &[u8]) -> std::io::Result<Vec<u8>> {
+pub fn decode(data: &[u8]) -> std::io::Result<Vec<u8>> {
     let mut buf = Vec::new();
     lzma_rs::lzma_decompress(&mut std::io::Cursor::new(data), &mut buf).map_err(|err| {
         std::io::Error::new(
