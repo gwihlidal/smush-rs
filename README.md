@@ -146,3 +146,61 @@ Maximum Quality
 [maximum] - bincode is 0.14% larger than identity - encode: 6.60 μs, decode: 8.60 μs
 [maximum] - base58 is 36.57% larger than identity - encode: 43.50 ms, decode: 13.85 ms
 ```
+By default, all codecs are enabled. It may be desirable to only enable the codecs that you want.
+
+You can specify `--no-default-features` / `default-features = false` to disable all codecs, and then opt in to the feature names for the codecs you want.
+
+Available codec feature names:
+
+- bincode_support
+- brotli_support
+- base58_support
+- deflate_support
+- gzip_support
+- xz_support
+- lz4_support
+- zlib_support
+- zstd_support
+
+As an example, the following shows support for only `brotli`, `lz4`, and `zstd`:
+
+```shell
+$ cargo run --release --example main --no-default-features --features=brotli_support,lz4_support,zstd_support
+
+*********************
+Level 1 Quality
+*********************
+[level1] - deflate not enabled
+[level1] - gzip not enabled
+[level1] - brotli is 53.33% smaller than identity - encode: 302.30 μs, decode: 209.20 μs
+[level1] - zlib not enabled
+[level1] - zstd is 59.80% smaller than identity - encode: 205.30 μs, decode: 96.90 μs
+[level1] - lz4 is 40.96% smaller than identity - encode: 119.40 μs, decode: 53.40 μs
+[level1] - xz not enabled
+[level1] - bincode not enabled
+[level1] - base58 not enabled
+*********************
+Default Quality
+*********************
+[default] - deflate not enabled
+[default] - gzip not enabled
+[default] - brotli is 63.32% smaller than identity - encode: 1.57 ms, decode: 80.20 μs
+[default] - zlib not enabled
+[default] - zstd is 62.30% smaller than identity - encode: 446.50 μs, decode: 73.50 μs
+[default] - lz4 is 46.67% smaller than identity - encode: 241.80 μs, decode: 74.70 μs
+[default] - xz not enabled
+[default] - bincode not enabled
+[default] - base58 not enabled
+*********************
+Maximum Quality
+*********************
+[maximum] - deflate not enabled
+[maximum] - gzip not enabled
+[maximum] - brotli is 65.12% smaller than identity - encode: 8.84 ms, decode: 111.80 μs
+[maximum] - zlib not enabled
+[maximum] - zstd is 63.12% smaller than identity - encode: 12.53 ms, decode: 110.60 μs
+[maximum] - lz4 is 46.67% smaller than identity - encode: 225.90 μs, decode: 78.30 μs
+[maximum] - xz not enabled
+[maximum] - bincode not enabled
+[maximum] - base58 not enabled
+```
