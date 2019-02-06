@@ -21,25 +21,28 @@ smush = "0.1.2"
 Example:
 
 ```rust
+extern crate elapsed;
 extern crate smush;
 
+use elapsed::measure_time;
 use smush::{decode, enabled_encoding, encode, Encoding, Quality};
 
 const TEST_DATA: &'static [u8] = include_bytes!("../src/ipsum.txt");
 
-fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str) {
+fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str, timings: &str) {
     let delta = (identity - codec) / identity * 100f32;
     if delta > 0f32 {
         println!(
-            "[{}] - {} is {}% smaller than identity",
-            quality, encoding, delta
+            "[{}] - {} is {:.2}% smaller than identity - {}",
+            quality, encoding, delta, timings
         );
     } else {
         println!(
-            "[{}] - {} is {}% larger than identity",
+            "[{}] - {} is {:.2}% larger than identity - {}",
             quality,
             encoding,
-            delta.abs()
+            delta.abs(),
+            timings
         );
     }
 }
@@ -47,10 +50,12 @@ fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str) {
 fn run_test(encoding: Encoding, quality: Quality) {
     let enabled = enabled_encoding(encoding.clone());
     if enabled {
-        let encoded = encode(&TEST_DATA, encoding.clone(), quality.clone()).unwrap();
+        let (encode_elapsed, encoded) =
+            measure_time(|| encode(&TEST_DATA, encoding.clone(), quality.clone()).unwrap());
         assert_ne!(&TEST_DATA, &encoded.as_slice());
 
-        let decoded = decode(&encoded, encoding.clone()).unwrap();
+        let (decode_elapsed, decoded) =
+            measure_time(|| decode(&encoded, encoding.clone()).unwrap());
         assert_eq!(&TEST_DATA, &decoded.as_slice());
 
         let encoded_len = encoded.len() as f32;
@@ -59,6 +64,7 @@ fn run_test(encoding: Encoding, quality: Quality) {
             encoded_len,
             &format!("{}", encoding),
             &format!("{}", quality),
+            &format!("encode: {}, decode: {}", encode_elapsed, decode_elapsed),
         );
     } else {
         println!("Encoding '{}': not enabled", &encoding);
@@ -103,37 +109,37 @@ $ cargo run --release --example main
 *********************
 Level 1 Quality
 *********************
-[level1] - deflate is 53.080654% smaller than identity
-[level1] - gzip is 52.757324% smaller than identity
-[level1] - brotli is 53.332138% smaller than identity
-[level1] - zlib is 52.972878% smaller than identity
-[level1] - zstd is 59.798813% smaller than identity
-[level1] - lz4 is 40.95563% smaller than identity
-[level1] - xz is 60.62511% smaller than identity
-[level1] - bincode is 0.14370397% larger than identity
-[level1] - base58 is 36.57266% larger than identity
+[level1] - deflate is 53.08% smaller than identity - encode: 174.30 μs, decode: 64.40 μs
+[level1] - gzip is 52.76% smaller than identity - encode: 138.50 μs, decode: 53.60 μs
+[level1] - brotli is 53.33% smaller than identity - encode: 165.70 μs, decode: 172.00 μs
+[level1] - zlib is 52.97% smaller than identity - encode: 127.50 μs, decode: 57.40 μs
+[level1] - zstd is 59.80% smaller than identity - encode: 145.80 μs, decode: 59.70 μs
+[level1] - lz4 is 40.96% smaller than identity - encode: 100.00 μs, decode: 49.10 μs
+[level1] - xz is 60.63% smaller than identity - encode: 1.58 ms, decode: 205.90 μs
+[level1] - bincode is 0.14% larger than identity - encode: 6.10 μs, decode: 9.20 μs
+[level1] - base58 is 36.57% larger than identity - encode: 43.33 ms, decode: 14.23 ms
 *********************
 Default Quality
 *********************
-[default] - deflate is 63.121967% smaller than identity
-[default] - gzip is 62.798637% smaller than identity
-[default] - brotli is 63.319565% smaller than identity
-[default] - zlib is 63.01419% smaller than identity
-[default] - zstd is 62.29567% smaller than identity
-[default] - lz4 is 46.667866% smaller than identity
-[default] - xz is 62.06215% smaller than identity
-[default] - bincode is 0.14370397% larger than identity
-[default] - base58 is 36.57266% larger than identity
+[default] - deflate is 63.12% smaller than identity - encode: 217.50 μs, decode: 47.60 μs
+[default] - gzip is 62.80% smaller than identity - encode: 201.00 μs, decode: 61.20 μs
+[default] - brotli is 63.32% smaller than identity - encode: 1.37 ms, decode: 92.30 μs
+[default] - zlib is 63.01% smaller than identity - encode: 170.00 μs, decode: 57.80 μs
+[default] - zstd is 62.30% smaller than identity - encode: 566.00 μs, decode: 80.10 μs
+[default] - lz4 is 46.67% smaller than identity - encode: 267.80 μs, decode: 33.60 μs
+[default] - xz is 62.06% smaller than identity - encode: 4.31 ms, decode: 258.40 μs
+[default] - bincode is 0.14% larger than identity - encode: 3.70 μs, decode: 9.10 μs
+[default] - base58 is 36.57% larger than identity - encode: 42.93 ms, decode: 13.79 ms
 *********************
 Maximum Quality
 *********************
-[maximum] - deflate is 63.121967% smaller than identity
-[maximum] - gzip is 62.798637% smaller than identity
-[maximum] - brotli is 65.11586% smaller than identity
-[maximum] - zlib is 63.01419% smaller than identity
-[maximum] - zstd is 64.199745% smaller than identity
-[maximum] - lz4 is 46.667866% smaller than identity
-[maximum] - xz is 62.06215% smaller than identity
-[maximum] - bincode is 0.14370397% larger than identity
-[maximum] - base58 is 36.57266% larger than identity
+[maximum] - deflate is 63.12% smaller than identity - encode: 187.40 μs, decode: 66.40 μs
+[maximum] - gzip is 62.80% smaller than identity - encode: 172.00 μs, decode: 55.90 μs
+[maximum] - brotli is 65.12% smaller than identity - encode: 8.82 ms, decode: 170.70 μs
+[maximum] - zlib is 63.01% smaller than identity - encode: 166.70 μs, decode: 46.50 μs
+[maximum] - zstd is 63.12% smaller than identity - encode: 12.99 ms, decode: 124.50 μs
+[maximum] - lz4 is 46.67% smaller than identity - encode: 350.10 μs, decode: 39.70 μs
+[maximum] - xz is 62.06% smaller than identity - encode: 10.91 ms, decode: 895.00 μs
+[maximum] - bincode is 0.14% larger than identity - encode: 6.60 μs, decode: 8.60 μs
+[maximum] - base58 is 36.57% larger than identity - encode: 43.50 ms, decode: 13.85 ms
 ```

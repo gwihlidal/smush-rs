@@ -1,22 +1,25 @@
+extern crate elapsed;
 extern crate smush;
 
+use elapsed::measure_time;
 use smush::{decode, enabled_encoding, encode, Encoding, Quality};
 
 const TEST_DATA: &'static [u8] = include_bytes!("../src/ipsum.txt");
 
-fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str) {
+fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str, timings: &str) {
     let delta = (identity - codec) / identity * 100f32;
     if delta > 0f32 {
         println!(
-            "[{}] - {} is {}% smaller than identity",
-            quality, encoding, delta
+            "[{}] - {} is {:.2}% smaller than identity - {}",
+            quality, encoding, delta, timings
         );
     } else {
         println!(
-            "[{}] - {} is {}% larger than identity",
+            "[{}] - {} is {:.2}% larger than identity - {}",
             quality,
             encoding,
-            delta.abs()
+            delta.abs(),
+            timings
         );
     }
 }
@@ -24,10 +27,12 @@ fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str) {
 fn run_test(encoding: Encoding, quality: Quality) {
     let enabled = enabled_encoding(encoding.clone());
     if enabled {
-        let encoded = encode(&TEST_DATA, encoding.clone(), quality.clone()).unwrap();
+        let (encode_elapsed, encoded) =
+            measure_time(|| encode(&TEST_DATA, encoding.clone(), quality.clone()).unwrap());
         assert_ne!(&TEST_DATA, &encoded.as_slice());
 
-        let decoded = decode(&encoded, encoding.clone()).unwrap();
+        let (decode_elapsed, decoded) =
+            measure_time(|| decode(&encoded, encoding.clone()).unwrap());
         assert_eq!(&TEST_DATA, &decoded.as_slice());
 
         let encoded_len = encoded.len() as f32;
@@ -36,6 +41,7 @@ fn run_test(encoding: Encoding, quality: Quality) {
             encoded_len,
             &format!("{}", encoding),
             &format!("{}", quality),
+            &format!("encode: {}, decode: {}", encode_elapsed, decode_elapsed),
         );
     } else {
         println!("Encoding '{}': not enabled", &encoding);
