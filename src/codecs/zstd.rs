@@ -10,7 +10,7 @@ fn quality_to_codec(quality: crate::Quality) -> i32 {
         crate::Quality::Level7 => 7,
         crate::Quality::Level8 => 8,
         crate::Quality::Level9 => 9,
-        crate::Quality::Maximum => 21,
+        crate::Quality::Maximum => 11, // Goes to 21, but significantly more time (i.e. ~164ms vs 0.5ms at default)
     }
 }
 
