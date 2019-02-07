@@ -3,7 +3,7 @@
 [![meshopt on travis-ci.com](https://travis-ci.com/gwihlidal/smush-rs.svg?branch=master)](https://travis-ci.com/gwihlidal/smush-rs)
 [![Latest version](https://img.shields.io/crates/v/smush.svg)](https://crates.io/crates/smush)
 [![Documentation](https://docs.rs/smush/badge.svg)](https://docs.rs/smush)
-[![LoC](https://tokei.rs/b1/github/gwihlidal/smush)](https://github.com/gwihlidal/smush)
+[![LoC](https://tokei.rs/b1/github/gwihlidal/smush-rs)](https://github.com/gwihlidal/smush-rs)
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![APACHE2](https://img.shields.io/badge/license-APACHE2-blue.svg)
 
