@@ -243,7 +243,7 @@ pub fn enabled_encoding(encoding: Encoding) -> bool {
 mod tests {
     use crate::*;
 
-    const TEST_DATA: &'static [u8] = include_bytes!("ipsum.txt");
+    const TEST_DATA: &[u8] = include_bytes!("ipsum.txt");
 
     #[test]
     fn encode_identity() {

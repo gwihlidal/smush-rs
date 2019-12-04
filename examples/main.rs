@@ -4,7 +4,7 @@ extern crate smush;
 use elapsed::measure_time;
 use smush::{decode, enabled_encoding, encode, Encoding, Quality};
 
-const TEST_DATA: &'static [u8] = include_bytes!("../src/ipsum.txt");
+const TEST_DATA: &[u8] = include_bytes!("../src/ipsum.txt");
 
 fn print_delta(identity: f32, codec: f32, encoding: &str, quality: &str, timings: &str) {
     let delta = (identity - codec) / identity * 100f32;
