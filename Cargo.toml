@@ -43,7 +43,6 @@ all = [
     "lz4_support",
     "zlib_support",
     "zstd_support",
-    "custom_support",
 ]
 base58_support = ["bs58"]
 bincode_support = ["bincode"]
@@ -54,4 +53,3 @@ lz4_support = ["lz4"]
 xz_support = ["xz2"]
 zlib_support = ["flate2"]
 zstd_support = ["zstd"]
-custom_support = []
