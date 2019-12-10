@@ -2,7 +2,7 @@ extern crate elapsed;
 extern crate smush;
 
 use elapsed::measure_time;
-use smush::{decode, encode, is_encoding_enabled, Encoding, Quality};
+use smush::{decode, encode, is_codec_enabled, Encoding, Quality};
 
 const TEST_DATA: &[u8] = include_bytes!("../src/ipsum.txt");
 
@@ -25,7 +25,7 @@ fn print_delta(identity: f32, codec: f32, encoding: Encoding, quality: Quality, 
 }
 
 fn run_test(encoding: Encoding, quality: Quality) {
-    if is_encoding_enabled(encoding) {
+    if is_codec_enabled(encoding) {
         let (encode_elapsed, encoded) =
             measure_time(|| encode(&TEST_DATA, encoding, quality).unwrap());
         assert_ne!(&TEST_DATA, &encoded.as_slice());

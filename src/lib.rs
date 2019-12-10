@@ -223,7 +223,7 @@ pub fn decode(data: &[u8], encoding: Encoding) -> io::Result<Vec<u8>> {
     }
 }
 
-pub fn is_encoding_enabled(encoding: Encoding) -> bool {
+pub fn is_codec_enabled(encoding: Encoding) -> bool {
     match encoding {
         Encoding::Gzip => cfg!(feature = "gzip_support"),
         Encoding::Deflate => cfg!(feature = "deflate_support"),
