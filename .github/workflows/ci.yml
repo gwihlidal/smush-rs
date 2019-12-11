@@ -1,0 +1,124 @@
+on: [push, pull_request]
+name: CI
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      # make sure all code has been formatted with rustfmt
+      - run: rustup component add rustfmt
+      - name: check rustfmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -- --check --color always
+
+      # run clippy to verify we have no warnings
+      - run: rustup component add clippy
+      - name: cargo fetch
+        uses: actions-rs/cargo@v1
+        with:
+          command: fetch
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --lib --tests -- -D warnings
+
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, "windows-latest"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: cargo fetch
+        uses: actions-rs/cargo@v1
+        with:
+          command: fetch
+      - name: cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --tests
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      - name: cargo build no features
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --tests --no-default-features
+      - name: cargo test no features
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --no-default-features
+      - name: cargo build lz4 only
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --tests --no-default-features --features=lz4
+      - name: cargo test lz4 only
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --no-default-features --features=lz4
+
+  publish_check:
+    name: Publish check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: cargo fetch
+        uses: actions-rs/cargo@v1
+        with:
+          command: fetch
+      - name: cargo publish
+        uses: actions-rs/cargo@v1
+        with:
+          command: publish
+          args: --dry-run
+      - name: docs check
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --no-deps
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: [test, publish_check]
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    - name: cargo fetch
+      uses: actions-rs/cargo@v1
+      with:
+        command: fetch
+    - name: cargo publish
+      uses: actions-rs/cargo@v1
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+      with:
+        command: publish
