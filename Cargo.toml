@@ -19,9 +19,6 @@ lto = true
 opt-level = 3
 codegen-units = 1
 
-[dev-dependencies]
-elapsed = "0.1.2"
-
 [dependencies]
 bincode = { version = "1.2.0", optional = true }
 brotli = { version = "3.3.0", optional = true }

@@ -1,5 +1,9 @@
 # Changes
 
+## Unreleased
+
+* Remove `elapsed` dependency used by example
+
 ## 0.1.4 (2019-02-07)
 
 * Fix build issue with tests.
