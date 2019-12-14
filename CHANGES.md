@@ -1,5 +1,9 @@
 # Changes
 
+## Unreleased
+
+* Explicitly enable only the features needed on the dependency crates
+
 ## 0.1.4 (2019-02-07)
 
 * Fix build issue with tests.
