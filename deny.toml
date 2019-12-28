@@ -1,0 +1,23 @@
+[bans]
+multiple-versions = "deny"
+deny = [
+]
+skip = [
+    # lz4 with skeptic brings in old dependency, skip for now
+    { name = "glob", version = "=0.2" },
+    # lz4 and skeptic brings in old rand, skip for now
+    { name = "rand_core", version = "=0.3" },
+]
+
+[licenses]
+unlicensed = "deny"
+# We want really high confidence when inferring licenses from text
+confidence-threshold = 0.92
+allow = [
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "MIT",
+    "Zlib",
+]
