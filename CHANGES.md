@@ -1,9 +1,14 @@
 # Changes
 
-## Unreleased
+## 01.5 (2019-12-28)
 
-* Remove `elapsed` dependency used by example
-* Explicitly enable only the features needed on the dependency crates
+* Remove `elapsed` dependency used by example.
+* Added `cargo-deny` CI step.
+* Explicitly enable only the features needed on the dependency crates.
+* Updated all dependencies.
+* Renamed `enabled_encoding` to `is_codec_enabled` and `encoding` to `codec`.
+* Replaced Travis with GitHub Actions.
+* Removed unused custom codec support.
 
 ## 0.1.4 (2019-02-07)
 
