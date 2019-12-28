@@ -21,7 +21,6 @@ smush = "0.1.4"
 Example:
 
 ```rust
-use elapsed::measure_time;
 use smush::{
     decode, encode, is_codec_enabled,
     Codec::{self, *},
@@ -50,11 +49,18 @@ fn print_delta(identity: f32, encoded: f32, codec: Codec, quality: Quality, timi
 
 fn run_test(encoding: Codec, quality: Quality) {
     if is_codec_enabled(encoding) {
-        let (encode_elapsed, encoded) =
-            measure_time(|| encode(&TEST_DATA, encoding, quality).unwrap());
+        let (encode_elapsed, encoded) = {
+            let start_time = Instant::now();
+            let e = encode(&TEST_DATA, encoding, quality).unwrap();
+            (start_time.elapsed(), e)
+        };
         assert_ne!(&TEST_DATA, &encoded.as_slice());
 
-        let (decode_elapsed, decoded) = measure_time(|| decode(&encoded, encoding).unwrap());
+       let (decode_elapsed, decoded) = {
+            let start_time = Instant::now();
+            let d = decode(&encoded, encoding).unwrap();
+            (start_time.elapsed(), d)
+        };
         assert_eq!(&TEST_DATA, &decoded.as_slice());
 
         let encoded_len = encoded.len() as f32;
@@ -63,7 +69,11 @@ fn run_test(encoding: Codec, quality: Quality) {
             encoded_len,
             encoding,
             quality,
-            &format!("encode: {}, decode: {}", encode_elapsed, decode_elapsed),
+            &format!(
+                "encode: {}, decode: {}",
+                encode_elapsed.as_secs_f32(),
+                decode_elapsed.as_secs_f32()
+            ),
         );
     } else {
         println!("[{}] - {} not enabled", quality, encoding);
