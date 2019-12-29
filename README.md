@@ -1,6 +1,6 @@
 # smush
 
-[![Build Status](https://github.com/gwihlidal/smush-rs/workflows/CI/badge.svg)]
+![Build Status](https://github.com/gwihlidal/smush-rs/workflows/CI/badge.svg)
 [![Latest version](https://img.shields.io/crates/v/smush.svg)](https://crates.io/crates/smush)
 [![Documentation](https://docs.rs/smush/badge.svg)](https://docs.rs/smush)
 [![LoC](https://tokei.rs/b1/github/gwihlidal/smush-rs)](https://github.com/gwihlidal/smush-rs)
